@@ -1,6 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class MethodOfVogel {
     private final Matrix supplyCoefficients;
@@ -42,7 +43,7 @@ public class MethodOfVogel {
             }
         }
         else{
-            for (int i = 0; i < costsCoefficients.getColumns(); ++i){
+            for (int i = 0; i < costsCoefficients.getRows(); ++i){
                 double element = costsCoefficients.getElement(i, column);
                 if (element < firstMin){
                     firstMin = element;
@@ -85,7 +86,7 @@ public class MethodOfVogel {
             }
         }
         else{
-            for (int i = 0; i < costsCoefficients.getColumns(); ++i){
+            for (int i = 0; i < costsCoefficients.getRows(); ++i){
                 if (i == firstMinIdx)
                     continue;
 
@@ -105,7 +106,7 @@ public class MethodOfVogel {
      */
     private ArrayList<Double> getRowDifferences(){
         int size = costsCoefficients.getRows();
-        ArrayList<Double> differences = new ArrayList<>(size);
+        ArrayList<Double> differences = new ArrayList<>(Collections.nCopies(size, 0.0));
 
         for (int row = 0; row < size; ++row){
             if (supplyCoefficients.getElement(row, 0) == 0){
@@ -115,6 +116,7 @@ public class MethodOfVogel {
 
             int first = firstMin(-1, row);
             int second = secondMin(-1, row, first);
+
             if (first == -1)
                 differences.set(row, Double.MAX_VALUE);
             else if (second == -1)
@@ -132,7 +134,7 @@ public class MethodOfVogel {
      */
     private ArrayList<Double> getColumnDifferences(){
         int size = costsCoefficients.getColumns();
-        ArrayList<Double> differences = new ArrayList<>(size);
+        ArrayList<Double> differences = new ArrayList<>(Collections.nCopies(size, 0.0));
 
         for (int column = 0; column < size; ++column){
             if (demandCoefficients.getElement(column, 0) == 0){
@@ -185,7 +187,7 @@ public class MethodOfVogel {
      */
     private ArrayList<Integer> maxDifference(){
         ArrayList<Double> rowDifferences = getRowDifferences();
-        ArrayList<Double> columnDifferences =getColumnDifferences();
+        ArrayList<Double> columnDifferences = getColumnDifferences();
 
         int rowIndex = getIndexOfMaxElement(rowDifferences);
         int columnIndex = getIndexOfMaxElement(columnDifferences);
@@ -227,14 +229,12 @@ public class MethodOfVogel {
      * @return initial solution X0 obtained using Vogel’s approximation method.
      */
     public Matrix solve(){
-        //initialize the matrix with 0
         Matrix initialSolution = new Matrix(costsCoefficients.getRows(), costsCoefficients.getColumns());
-        for (int i = 0; i < costsCoefficients.getRows(); ++i){
-            for (int j = 0; j < costsCoefficients.getColumns(); ++i){
+        for (int i = 0; i < costsCoefficients.getRows(); ++i)
+            for (int j = 0; j < costsCoefficients.getColumns(); ++j)
                 initialSolution.setElement(i, j, 0);
-            }
-        }
 
+        int k = 0;
         while (true){
             ArrayList<Integer> place = maxDifference();
             int type = place.get(0);
@@ -251,19 +251,19 @@ public class MethodOfVogel {
                 row = minCoefficientIdx(column, -1);
             }
 
-            double cost = costsCoefficients.getElement(row, column);
             double supply = supplyCoefficients.getElement(row, 0);
             double demand = demandCoefficients.getElement(column, 0);
 
             double minValue = min(supply, demand);
 
-            initialSolution.setElement(row, column, cost * minValue);
+            initialSolution.setElement(row, column, minValue);
 
             costsCoefficients.setElement(row, column, Double.MAX_VALUE); // has never been used
             supplyCoefficients.setElement(row, 0, supply - minValue);
-            demandCoefficients.setElement(row, 0, demand - minValue);
+            demandCoefficients.setElement(column, 0, demand - minValue);
         }
 
         return initialSolution;
     }
+
 }

@@ -24,27 +24,20 @@ public class Main {
             return;
         }
 
+        NorthWestCornerMethod method1 = new NorthWestCornerMethod(supplyCoefficients, costsCoefficients, demandCoefficients);
         MethodOfVogel method2 = new MethodOfVogel(supplyCoefficients, costsCoefficients, demandCoefficients);
+        MethodOfRussell method3 = new MethodOfRussell(supplyCoefficients, costsCoefficients, demandCoefficients);
+
+        Matrix initialSolution1 = method1.solve();
         Matrix initialSolution2 = method2.solve();
+        Matrix initialSolution3 = method3.solve();
 
         OutputPrinter printer = new OutputPrinter();
         printer.printTable(supplyCoefficients, costsCoefficients, demandCoefficients);
 
+        printer.printSolution(initialSolution1);
         printer.printSolution(initialSolution2);
-
-//        NorthWestCornerMethod method1 = new NorthWestCornerMethod(supplyCoefficients, costsCoefficients, demandCoefficients);
-//        MethodOfVogel method2 = new MethodOfVogel(supplyCoefficients, costsCoefficients, demandCoefficients);
-//        MethodOfRussell method3 = new MethodOfRussell(supplyCoefficients, costsCoefficients, demandCoefficients);
-//
-//        Matrix initialSolution1 = method1.solve();
-//        Matrix initialSolution2 = method2.solve();
-//        Matrix initialSolution3 = method3.solve();
-//
-//        OutputPrinter printer = new OutputPrinter();
-//        printer.printTable(supplyCoefficients, costsCoefficients, demandCoefficients);
-//
-//        printer.printSolution(initialSolution1);
-//        printer.printSolution(initialSolution2);
-//        printer.printSolution(initialSolution3);
+        printer.printSolution(initialSolution3);
     }
 }
+
