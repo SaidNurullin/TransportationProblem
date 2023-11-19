@@ -1,4 +1,11 @@
 public class InputValidator {
+    /**
+     *
+     * @param supply A vector of coefficients of supply - S
+     * @param costs A matrix of coefficients of costs - C
+     * @param demand A vector of coefficients of demand - D
+     * @return true, if method is applicable; false, if method is not applicable.
+     */
     public boolean isMethodApplicable(Matrix supply, Matrix costs, Matrix demand){
         for (int i = 0; i < supply.getRows(); i++){
             if(supply.getElement(i, 0) < 0){
@@ -20,6 +27,12 @@ public class InputValidator {
         return true;
     }
 
+    /**
+     *
+     * @param supply A vector of coefficients of supply - S
+     * @param demand A vector of coefficients of demand - D
+     * @return true, if problem is balanced; false, if problem is not balanced.
+     */
     public boolean isProblemBalanced(Matrix supply, Matrix demand){
         double sum1 = 0;
         double sum2 = 0;

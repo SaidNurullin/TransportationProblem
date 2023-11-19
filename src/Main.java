@@ -6,7 +6,7 @@ public class Main {
         Matrix supplyCoefficients = new Matrix(numOfSupply, 1);
         reader.readMatrixNx1(supplyCoefficients);
         Matrix costsCoefficients = new Matrix(numOfSupply, numOfDemand);
-        reader.readMatrixNxN(costsCoefficients);
+        reader.readMatrixNxM(costsCoefficients);
         Matrix demandCoefficients = new Matrix(numOfDemand, 1);
         reader.readMatrixNx1(demandCoefficients);
         reader.close();

@@ -65,6 +65,15 @@ public class MethodOfRussell {
         }
         return deltas;
     }
+
+    /**
+     *
+     * @param deltas Matrix of deltas, delta(i, j) = c(i, j) - u(i) - v(j);
+     * c - costsCoefficients;
+     * u - rowCoefficients;
+     * v - columnCoefficients.
+     * @return coordinates of the negative delta with the largest absolute value.
+     */
     private List<Integer> largestNegativeDeltaCoordinates(Matrix deltas){
         List<Integer> coordinates = new ArrayList<>();
         coordinates.add(0);
@@ -90,6 +99,7 @@ public class MethodOfRussell {
     private double min(double a, double b){
         return a < b ? a: b;
     }
+
     /**
      *
      * @return initial solution X0 obtained using  Russell’s approximation method
