@@ -2,6 +2,9 @@ public class OutputPrinter {
     public void printSolution(Matrix solution){
         for(int i = 0; i < solution.getRows(); i++){
             for(int j = 0; j < solution.getColumns(); j++){
+                if(solution.getElement(i, j) == 0){
+                    continue;
+                }
                 String s = "X";
                 s += i;
                 s += j;
