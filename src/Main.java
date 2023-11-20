@@ -40,3 +40,4 @@ public class Main {
         printer.printSolution(initialSolution3);
     }
 }
+
