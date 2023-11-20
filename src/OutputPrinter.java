@@ -1,7 +1,14 @@
 public class OutputPrinter {
+    /**
+     * Prints initial solution in a beautiful way.
+     * @param solution  initial basic feasible solution - x0
+     */
     public void printSolution(Matrix solution){
         for(int i = 0; i < solution.getRows(); i++){
             for(int j = 0; j < solution.getColumns(); j++){
+                if(solution.getElement(i, j) == 0){
+                    continue;
+                }
                 String s = "X";
                 s += i;
                 s += j;
@@ -12,6 +19,13 @@ public class OutputPrinter {
         }
     }
 
+    /**
+     * Prints input parameter table (a table constructed using matrix C, vectors S
+     * and D) in a beautiful way.
+     * @param supply A vector of coefficients of supply - S
+     * @param costs A matrix of coefficients of costs - C
+     * @param demand A vector of coefficients of demand - D
+     */
     public void printTable(Matrix supply, Matrix costs, Matrix demand){
         Matrix table = new Matrix(costs.getRows()+1, costs.getColumns()+1);
         for(int i = 0; i < supply.getRows(); i++){

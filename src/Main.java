@@ -6,14 +6,14 @@ public class Main {
         Matrix supplyCoefficients = new Matrix(numOfSupply, 1);
         reader.readMatrixNx1(supplyCoefficients);
         Matrix costsCoefficients = new Matrix(numOfSupply, numOfDemand);
-        reader.readMatrixNxN(costsCoefficients);
+        reader.readMatrixNxM(costsCoefficients);
         Matrix demandCoefficients = new Matrix(numOfDemand, 1);
         reader.readMatrixNx1(demandCoefficients);
         reader.close();
 
         InputValidator validator = new InputValidator();
         boolean isApplicable = validator.isMethodApplicable(supplyCoefficients, costsCoefficients, demandCoefficients);
-        boolean isBalanced = validator.isProblemBalanced(supplyCoefficients, costsCoefficients, demandCoefficients);
+        boolean isBalanced = validator.isProblemBalanced(supplyCoefficients, demandCoefficients);
 
         if(!isApplicable){
             System.out.println("The method is not applicable!");
@@ -24,9 +24,12 @@ public class Main {
             return;
         }
 
-        NorthWestCornerMethod method1 = new NorthWestCornerMethod(supplyCoefficients, costsCoefficients, demandCoefficients);
-        MethodOfVogel method2 = new MethodOfVogel(supplyCoefficients, costsCoefficients, demandCoefficients);
-        MethodOfRussell method3 = new MethodOfRussell(supplyCoefficients, costsCoefficients, demandCoefficients);
+        NorthWestCornerMethod method1 = new NorthWestCornerMethod(new Matrix(supplyCoefficients),
+                new Matrix(costsCoefficients), new Matrix(demandCoefficients));
+        MethodOfVogel method2 = new MethodOfVogel(new Matrix(supplyCoefficients),
+                new Matrix(costsCoefficients), new Matrix(demandCoefficients));
+        MethodOfRussell method3 = new MethodOfRussell(new Matrix(supplyCoefficients),
+                new Matrix(costsCoefficients), new Matrix(demandCoefficients));
 
         Matrix initialSolution1 = method1.solve();
         Matrix initialSolution2 = method2.solve();
