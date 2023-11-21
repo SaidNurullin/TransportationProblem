@@ -45,8 +45,8 @@ public class NorthWestCornerMethod {
 
         int i = 0;
         int j = 0;
-        while (i < solution.getRows() && j < solution.getRows()) {
-            int allocation = (int) min(demandCoefficients.getElement(j, 0), supplyCoefficients.getElement(i, 0));
+        while (i < solution.getRows() && j < solution.getColumns()) {
+            double allocation = min(demandCoefficients.getElement(j, 0), supplyCoefficients.getElement(i, 0));
             demand.setElement(j, 0, demand.getElement(j, 0) - allocation);
             supply.setElement(i, 0, supply.getElement(i, 0) - allocation);
 

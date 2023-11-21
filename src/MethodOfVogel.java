@@ -110,7 +110,7 @@ public class MethodOfVogel {
 
         for (int row = 0; row < size; ++row){
             if (supplyCoefficients.getElement(row, 0) == 0){
-                differences.set(row, Double.MAX_VALUE);
+                differences.set(row, 0.0);
                 continue;
             }
 
@@ -138,7 +138,7 @@ public class MethodOfVogel {
 
         for (int column = 0; column < size; ++column){
             if (demandCoefficients.getElement(column, 0) == 0){
-                differences.set(column, Double.MAX_VALUE);
+                differences.set(column, 0.0);
                 continue;
             }
 
@@ -258,9 +258,20 @@ public class MethodOfVogel {
 
             initialSolution.setElement(row, column, minValue);
 
-            costsCoefficients.setElement(row, column, Double.MAX_VALUE); // has never been used
+
             supplyCoefficients.setElement(row, 0, supply - minValue);
             demandCoefficients.setElement(column, 0, demand - minValue);
+
+            if(supplyCoefficients.getElement(row, 0) == 0){
+                for (int i = 0; i < costsCoefficients.getColumns(); i++){
+                    costsCoefficients.setElement(row, i, Double.MAX_VALUE);
+                }
+            }
+            if(demandCoefficients.getElement(column, 0) == 0){
+                for (int i = 0; i < costsCoefficients.getRows(); i++){
+                    costsCoefficients.setElement(i, column, Double.MAX_VALUE);
+                }
+            }
         }
 
         return initialSolution;
