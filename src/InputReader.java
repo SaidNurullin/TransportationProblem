@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class InputReader implements AutoCloseable {
+public class InputReader{
     private final Scanner scanner;
 
     public InputReader() {
@@ -42,8 +42,5 @@ public class InputReader implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() {
-        scanner.close();
-    }
+
 }

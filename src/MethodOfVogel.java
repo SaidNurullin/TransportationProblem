@@ -9,8 +9,8 @@ public class MethodOfVogel {
     private final Matrix demandCoefficients;
 
     public MethodOfVogel(Matrix coefficientsOfSupply,
-                                 Matrix coefficientsOfCosts,
-                                 Matrix coefficientsOfDemand){
+                         Matrix coefficientsOfCosts,
+                         Matrix coefficientsOfDemand){
         supplyCoefficients = coefficientsOfSupply;
         costsCoefficients = coefficientsOfCosts;
         demandCoefficients = coefficientsOfDemand;
@@ -110,7 +110,7 @@ public class MethodOfVogel {
 
         for (int row = 0; row < size; ++row){
             if (supplyCoefficients.getElement(row, 0) == 0){
-                differences.set(row, 0.0);
+                differences.set(row, Double.MAX_VALUE);
                 continue;
             }
 
@@ -138,7 +138,7 @@ public class MethodOfVogel {
 
         for (int column = 0; column < size; ++column){
             if (demandCoefficients.getElement(column, 0) == 0){
-                differences.set(column, 0.0);
+                differences.set(column, Double.MAX_VALUE);
                 continue;
             }
 
@@ -162,7 +162,7 @@ public class MethodOfVogel {
      * @return index of max element
      */
     private int getIndexOfMaxElement(ArrayList<Double> array){
-        Double maxElement = Double.MIN_VALUE;
+        Double maxElement = -1.0;
         int index = -1;
         for (int i = 0; i < array.size(); ++i){
             Double element = array.get(i);
@@ -200,7 +200,7 @@ public class MethodOfVogel {
             return new ArrayList<>(Arrays.asList(0, rowIndex));
 
         return rowDifferences.get(rowIndex) >= columnDifferences.get(columnIndex) ?
-            new ArrayList<>(Arrays.asList(0, rowIndex)) : new ArrayList<>(Arrays.asList(1, columnIndex));
+                new ArrayList<>(Arrays.asList(0, rowIndex)) : new ArrayList<>(Arrays.asList(1, columnIndex));
     }
 
     /**
@@ -222,6 +222,20 @@ public class MethodOfVogel {
      */
     private double min(double a, double b){
         return Math.min(a, b);
+    }
+
+    /**
+     * if the row or column is zero, we reset the cost in the table
+     * @param row the index of the row that we check for zeroing (value = 0)
+     * @param column the index of the column that we check for zeroing (value = 0)
+     */
+    private void blockEmptyRowAndColumnByPoint(int row, int column){
+        if (supplyCoefficients.getElement(row, 0) == 0)
+            for (int i = 0; i < costsCoefficients.getColumns(); ++i)
+                costsCoefficients.setElement(row, i, Double.MAX_VALUE);
+        if (demandCoefficients.getElement(column, 0) == 0)
+            for (int i = 0; i < costsCoefficients.getRows(); ++i)
+                costsCoefficients.setElement(i, column, Double.MAX_VALUE);
     }
 
     /**
@@ -258,23 +272,12 @@ public class MethodOfVogel {
 
             initialSolution.setElement(row, column, minValue);
 
-
+            costsCoefficients.setElement(row, column, Double.MAX_VALUE); // has never been used
             supplyCoefficients.setElement(row, 0, supply - minValue);
             demandCoefficients.setElement(column, 0, demand - minValue);
-
-            if(supplyCoefficients.getElement(row, 0) == 0){
-                for (int i = 0; i < costsCoefficients.getColumns(); i++){
-                    costsCoefficients.setElement(row, i, Double.MAX_VALUE);
-                }
-            }
-            if(demandCoefficients.getElement(column, 0) == 0){
-                for (int i = 0; i < costsCoefficients.getRows(); i++){
-                    costsCoefficients.setElement(i, column, Double.MAX_VALUE);
-                }
-            }
+            blockEmptyRowAndColumnByPoint(row, column);
         }
 
         return initialSolution;
     }
-
 }
